@@ -144,6 +144,7 @@
                               {$body}
                         </div>
                   </div>
+                  <hr>
             ";
          }
          echo $str;
