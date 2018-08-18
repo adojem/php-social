@@ -7,6 +7,12 @@
    src: url('../fonts/Bellota-BoldItalic.otf');
 }
 
+.clearfix::after {
+	content: '';
+	display: block;
+	clear: both;
+}
+
 body {
    background-color: #e6eaeb;
 }

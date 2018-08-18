@@ -59,4 +59,4 @@ else {
     </nav>
   </div>
 
-  <div class="wrapper">
+  <div class="wrapper clearfix">

@@ -42,47 +42,53 @@
 
          $(function () {
             $loading = $('#loading');
-            $postArea = $('.post_area');
+            $postsArea = $('.posts_area');
 
             $loading.show();
 
             // Original ajax request for loading first posts
             $.ajax({
-               url: 'icludes/handlers/ajax_load_posts_php',
+               url: 'includes/handlers/ajax_load_posts.php',
                type: 'POST',
-               data: 'page=1&userLoggedIn=' + userLoggedIn,
+               data: {
+                  page: 1,
+                  userLoggedIn: userLoggedIn,
+               },
                cache: false,
-
-               success: function () {
+               success: function (data) {
                   $loading.hide();
-                  $postArea.html(data);
+                  $postsArea.html(data);
                }
             });
 
             $(window).scroll(function () {
-               var height = $postArea.height();
+               var height = $postsArea.height();
                var scroll_top = $(this).scrollTop();
-               var page = $postArea.find('.nextPage').val();
-               var noMorePosts = $postArea.find('.noMorePosts').val();
-
-               if ((document.body.scrollHeight === document.body.scrollTop + window.innerHeight) && noMorePosts == 'false') {
+               var page = $postsArea.find('.nextPage').val();
+               var noMorePosts = $postsArea.find('.noMorePosts').val();
+            
+               if ((document.body.scrollHeight === Math.floor(document.documentElement.scrollTop)+window.innerHeight) && noMorePosts === 'false') {
                   $loading.show();
 
-                  $.ajax({
-                     url: 'icludes/handlers/ajax_load_posts_php',
+                  var ajaxReq = $.ajax({
+                     url: 'includes/handlers/ajax_load_posts.php',
                      type: 'POST',
-                     data: `page=${page}&userLoggedIn=${userLoggedIn}`,
+                     data: {
+                        page: page,
+                        userLoggedIn: userLoggedIn,
+                     },
                      cache: false,
-
-                     success: function (res) {
-                        $postArea.find('.nextPage').remove();
-                        $postArea.find('.noMorePosts').remove();
+                     success: function (response) {
+                        $postsArea.find('.nextPage').remove();
+                        $postsArea.find('.noMorePosts').remove();
 
                         $loading.hide();
-                        $postArea.append(res);
+                        $postsArea.append(response);
                      }
                   });
-               }
+               } // end if
+
+               return false;
             });
          });
       </script>
