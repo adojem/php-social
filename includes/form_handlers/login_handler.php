@@ -6,16 +6,17 @@ if (isset($_POST['login_button'])) {
    echo $_POST['loin_email'];
    // echo $password;
 
-   $check_database_query = mysqli_query($con, "SELECT * FROM users WHERE email = '$email' AND password = '$password'");;
-   $check_login_query = mysqli_num_rows($check_database_query);
+   $check_database_query = $con->query("SELECT * FROM users WHERE email = '$email' AND password = '$password'");
+   
+   $check_login_query = $check_database_query->rowCount();
 
    if ($check_login_query == 1) {
-      $row = mysqli_fetch_array($check_database_query);
+      $row = $check_database_query->fetch();
       $username = $row['username'];
 
-      $user_closed_query = mysqli_query($con, "SELECT * FROM users WHERE email = '$email' AND user_closed = 'yes'");
-      if (mysqli_num_rows($user_closed_query) == 1) {
-         $reopen_account = mysqli_query($con, "UPDATE users SET user_closed = 'no' WHERE email = '$email'");
+      $user_closed_query = $con->query("SELECT * FROM users WHERE email = '$email' AND user_closed = 'yes'");
+      if ($user_closed_query->rowCount() == 1) {
+         $reopen_account = $con->query("UPDATE users SET user_closed = 'no' WHERE email = '$email'");
       }
 
       $_SESSION['username'] = $username;

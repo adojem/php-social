@@ -26,7 +26,7 @@
             }
 
             // insert post
-            $query = mysqli_query($this->con, "INSERT INTO posts VALUES ('', '$body', '$added_by', '$user_to', '$date_added', 'no', 'no', '0')");
+            $query = $this->con->query("INSERT INTO posts VALUES ('', '$body', '$added_by', '$user_to', '$date_added', 'no', 'no', '0')");
             $returned_id = mysqli_insert_id($this->con);
 
             // insert notification
@@ -49,14 +49,14 @@
          }
 
          $str = ""; // String to return
-         $data = mysqli_query($this->con, "SELECT * FROM  posts WHERE deleted='no' ORDER BY id DESC");
+         $data = $this->con->query("SELECT * FROM  posts WHERE deleted='no' ORDER BY id DESC");
 
-         if (mysqli_num_rows($data)) {
+         if ($data->fetchColumn()) {
 
             $num_iteration = 0; // number of results cheecked (not necessarily posted)
             $count = 1;
 
-            while ($row = mysqli_fetch_array($data)) {
+            while ($row = $data->fetch()) {
                   $id = $row['id'];
                   $body = $row['body'];
                   $added_by = $row['added_by'];
@@ -93,8 +93,8 @@
                               $count++;
                         }
 
-                        $user_details_query = mysqli_query($this->con, "SELECT first_name, last_name, profile_pic FROM users WHERE username = '$added_by'");
-                        $user_row = mysqli_fetch_array($user_details_query);
+                        $user_details_query = $this->con->query("SELECT first_name, last_name, profile_pic FROM users WHERE username = '$added_by'");
+                        $user_row = $user_details_query->fetch();
                         $first_name = $user_row['first_name'];
                         $last_name = $user_row['last_name'];
                         $profile_pic = $user_row['profile_pic'];
